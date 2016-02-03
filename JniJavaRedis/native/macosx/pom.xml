@@ -1,0 +1,90 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>redis.benchmark.hiredis</groupId>
+		<artifactId>nativeParent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>redis.benchmark.hiredis</groupId>
+	<artifactId>libjniRedisNative</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>JNI native redis macosx</name>
+	<url>http://maven.apache.org</url>
+
+	<packaging>dylib</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>redis.benchmark.hiredis</groupId>
+			<artifactId>jniJavaRedis</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<!-- trigger javah -->
+					<javahOS>macosx</javahOS>
+
+					<compilerProvider>generic-classic</compilerProvider>
+					<compilerExecutable>gcc</compilerExecutable>
+					<linkerExecutable>gcc</linkerExecutable>
+					<sources>
+						<source>
+							<directory>../src/main/native</directory>
+							<fileNames>
+								<fileName>jni_redis.cpp</fileName>
+							</fileNames>
+						</source>
+						<source>
+							<directory>/usr/local/include/hiredis</directory>
+							<includes>
+								<include>*.h</include>
+							</includes>
+						</source>
+						
+						<source>
+							<directory>/library/Java/JavaVirtualMachines/jdk1.8.0_66.jdk/Contents/Home/include/darwin</directory>
+							<includes>
+								<include>*.h</include>
+							</includes>
+						</source>
+					</sources>
+
+					<linkerStartOptions>
+						<linkerStartOption>-shared -arch x86_64 /usr/local/lib/libhiredis.dylib</linkerStartOption>
+					</linkerStartOptions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>javah</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<javahOS>macosx</javahOS>
+							<javahProvider>default</javahProvider>
+							<javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+							<workingDirectory>${basedir}</workingDirectory>
+							<javahOutputFileName>nativeRedis.h</javahOutputFileName>
+							<javahClassNames>
+								<javahClassName>redis.benchmark.hiredis.NativeRedis</javahClassName>
+							</javahClassNames>
+						</configuration>
+						<goals>
+							<goal>javah</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

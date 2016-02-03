@@ -1,0 +1,16 @@
+Help on how to run
+
+1. set the javahome, jre home and path vars .
+
+export JAVA_HOME=/home/user/jdk1.8/;
+export JRE_HOME=/home/user/jdk1.8/jre;
+export PATH=$PATH:/home/user/jdk1.8/bin;
+
+2. mvn install
+to generate jar
+
+3. run command
+sudo -u <runasuser> /home/user/jdk1.8/bin/java  -Xms500M -Xmx2048M  -jar Redis-benchmark-1-allinone.jar -n 1000000 -h localhost -p 6389 -c 100 -s 1024
+
+
+ 
