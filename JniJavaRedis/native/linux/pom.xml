@@ -45,6 +45,8 @@
 
 					<compilerProvider>generic-classic</compilerProvider>
 					<compilerExecutable>gcc</compilerExecutable>
+					<compilerStartOptions> -fPIC -I/usr/local/include/hiredis
+						-I/usr/jdk1.8/include/linux</compilerStartOptions>
 
 					<linkerExecutable>gcc</linkerExecutable>
 					<sources>
@@ -54,24 +56,10 @@
 								<fileName>jni_redis.cpp</fileName>
 							</fileNames>
 						</source>
-						<source>
-							<directory>/usr/local/include/hiredis</directory>
-							<includes>
-								<include>*.h</include>
-							</includes>
-						</source>
-
-						<source>
-							<directory>/library/Java/JavaVirtualMachines/jdk1.8.0_66.jdk/Contents/Home/include/darwin</directory>
-							<includes>
-								<include>*.h</include>
-							</includes>
-						</source>
 					</sources>
 
 					<linkerStartOptions>
-						<linkerStartOption>-shared -arch x86_64
-							/usr/local/lib/libhiredis.dylib</linkerStartOption>
+						<linkerStartOption>-shared -o /usr/local/lib/libhiredis.so</linkerStartOption>
 					</linkerStartOptions>
 
 				</configuration>
@@ -85,7 +73,7 @@
 							<javahProvider>default</javahProvider>
 							<javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
 							<workingDirectory>${basedir}</workingDirectory>
-							<javahOutputFileName>nativeStuff.h</javahOutputFileName>
+							<javahOutputFileName>nativeRedis.h</javahOutputFileName>
 							<javahClassNames>
 								<javahClassName>redis.benchmark.hiredis.NativeRedis</javahClassName>
 							</javahClassNames>
