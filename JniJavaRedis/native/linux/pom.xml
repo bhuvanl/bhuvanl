@@ -45,22 +45,26 @@
 
 					<compilerProvider>generic-classic</compilerProvider>
 					<compilerExecutable>gcc</compilerExecutable>
-					<compilerStartOptions> -fPIC -I/usr/local/include/hiredis
-						-I/usr/jdk1.8/include/linux</compilerStartOptions>
-
+					<compilerStartOptions> -O2 -Werror -Wall -std=c99 -fPIC
+						-I/usr/local/include/hiredis
+						-I/apollo/env/A9TrafficQualityService/jdk1.8/include/linux
+					</compilerStartOptions>
+					<!-- -I/javaHome/jdk1.8/include/linux to above compiler option -->
 					<linkerExecutable>gcc</linkerExecutable>
 					<sources>
 						<source>
 							<directory>../src/main/native</directory>
 							<fileNames>
-								<fileName>jni_redis.cpp</fileName>
+								<fileName>jni_redis.c</fileName>
 							</fileNames>
 						</source>
 					</sources>
 
 					<linkerStartOptions>
-						<linkerStartOption>-shared -o /usr/local/lib/libhiredis.so</linkerStartOption>
+						<linkerStartOption> --no-undefined -shared
+							-Wl,-soname,/usr/local/lib/libhiredis.so -lhiredis</linkerStartOption>
 					</linkerStartOptions>
+					<linkerEndOptions>-lc</linkerEndOptions>
 
 				</configuration>
 

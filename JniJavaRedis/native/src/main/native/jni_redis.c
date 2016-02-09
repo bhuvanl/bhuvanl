@@ -13,11 +13,11 @@ JNIEXPORT void JNICALL Java_redis_benchmark_hiredis_NativeRedis_helloRedis
 
 JNIEXPORT jlong JNICALL Java_redis_benchmark_hiredis_NativeRedis_connect(
 		JNIEnv * env, jobject obj, jstring host, jint jport) {
-	const char *ip = env->GetStringUTFChars(host, NULL);
+	const char *ip = (*env)->GetStringUTFChars(env, host, NULL);
 	const int port = (int) jport;
 	redisContext *connection = redisConnect(ip, port);
-	env->ReleaseStringUTFChars(host, ip);
-	return (long) connection;
+	(*env)->ReleaseStringUTFChars(env, host, ip);
+	return (uintptr_t) connection;
 }
 
 JNIEXPORT void JNICALL Java_redis_benchmark_hiredis_NativeRedis_close
@@ -30,15 +30,15 @@ JNIEXPORT void JNICALL Java_redis_benchmark_hiredis_NativeRedis_close
 JNIEXPORT jobjectArray JNICALL Java_redis_benchmark_hiredis_NativeRedis_command(
 		JNIEnv * env, jobject obj, jlong jconnection, jstring commandString) {
 	redisContext *connection = (redisContext*) jconnection;
-	const char *command = env->GetStringUTFChars(commandString, NULL);
+	const char *command = (*env)->GetStringUTFChars(env, commandString, 0);
 	redisReply *reply = (redisReply*) redisCommand(connection, command);
-	env->ReleaseStringUTFChars(commandString, command);
-	jobjectArray elements = env->NewObjectArray(reply->elements,
-			env->FindClass("java/lang/String"), env->NewStringUTF(""));
+	(*env)->ReleaseStringUTFChars(env, commandString, command);
+	jobjectArray elements = (*env)->NewObjectArray(env, reply->elements,
+			(*env)->FindClass(env, "java/lang/String"),
+			(*env)->NewStringUTF(env, ""));
 	for (int i = 0; i < reply->elements; i++) {
-		env->SetObjectArrayElement(elements, i,
-				env->NewStringUTF(reply->element[i]->str));
+		(*env)->SetObjectArrayElement(env, elements, i,
+				(*env)->NewStringUTF(env, reply->element[i]->str));
 	}
 	return elements;
 }
-

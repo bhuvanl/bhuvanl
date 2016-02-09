@@ -43,7 +43,7 @@
 						<source>
 							<directory>../src/main/native</directory>
 							<fileNames>
-								<fileName>jni_redis.cpp</fileName>
+								<fileName>jni_redis.c</fileName>
 							</fileNames>
 						</source>
 						<source>
@@ -52,7 +52,7 @@
 								<include>*.h</include>
 							</includes>
 						</source>
-						
+
 						<source>
 							<directory>/library/Java/JavaVirtualMachines/jdk1.8.0_66.jdk/Contents/Home/include/darwin</directory>
 							<includes>
@@ -62,7 +62,8 @@
 					</sources>
 
 					<linkerStartOptions>
-						<linkerStartOption>-shared -arch x86_64 /usr/local/lib/libhiredis.dylib</linkerStartOption>
+						<linkerStartOption>-shared -arch x86_64
+							/usr/local/lib/libhiredis.dylib</linkerStartOption>
 					</linkerStartOptions>
 				</configuration>
 				<executions>
